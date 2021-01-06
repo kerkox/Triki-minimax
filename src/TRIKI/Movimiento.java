@@ -15,8 +15,8 @@ public class Movimiento {
 
     }
 
-    public int valorPos(int pos, Juego g){
-        int x=0, y=0, id;
+    public int valorPos(int pos, Juego g) {
+        int x = 0, y = 0, id;
         switch (pos) {
             case 1:
                 id = 1;
@@ -67,8 +67,9 @@ public class Movimiento {
         }
 
         return g.tablero[x][y];
-        
+
     }
+
     public int ganador(Juego g) {
         int winer = 0;
         // REVISION DE FORMA HORIZONTAL
@@ -110,8 +111,7 @@ public class Movimiento {
         return winer;
 
     }
-    
-    
+
     public void Mover2(int pos, Juego g, int ficha) {
         int x = 0, y = 0;
         switch (pos) {
@@ -154,15 +154,10 @@ public class Movimiento {
 
         }
 
-       
-                g.tablero[x][y] = ficha;
-            
-        
+        g.tablero[x][y] = ficha;
 
-       
     }
-    
-    
+
 //    public int Mover(int pos,int tab[][],int turno)
     public int Mover(int pos, Juego g, int ficha) {
         int x = 0, y = 0;
@@ -212,13 +207,12 @@ public class Movimiento {
             //throw Posicion_Ocupada;
             // Lanzar ERROR ######
         } else {
-            
-                g.tablero[x][y] = ficha;
-            
+
+            g.tablero[x][y] = ficha;
+
         }
         return 0;
 
-       
     }
 
     //Evalua si la posicion pasada esta libre
@@ -289,102 +283,96 @@ public class Movimiento {
     //si todas estan ocupadas devuevle FALSE   
     public boolean posicionesFree(Juego g) {
         int i;
-        
-        for(i=1;i<10;i++)
-        {
-                       
-        if(posFree(i,g)){
 
-            return true;
-            
-        }
+        for (i = 1; i < 10; i++) {
+
+            if (posFree(i, g)) {
+
+                return true;
+
+            }
         }
 
         return false;
 
     }
 
-    public int moverPC(Juego g, Jugador j1, Jugador PC)
-    {
-        int pos=0, k;
-        int FichaPC=(PC.darTurno()*10)+PC.darTurno();
-        int FichaJ1=(j1.darTurno()*10)+j1.darTurno();
-        int aux, mejor=-9999;
-        
-        for(int i=1;i<10;i++){
-            if(posFree(i,g))
-            {
-                Mover2(i,g,FichaPC);
-                
-                aux=min(g,j1,PC);
-                if(aux>mejor)
-                {
-                    mejor=aux;
-                    pos=i;
+    public int moverPC(Juego g, Jugador j1, Jugador PC) {
+        int pos = 0, k;
+        int FichaPC = (PC.darTurno() * 10) + PC.darTurno();
+        int FichaJ1 = (j1.darTurno() * 10) + j1.darTurno();
+        int aux, mejor = -9999;
+
+        for (int i = 1; i < 10; i++) {
+            if (posFree(i, g)) {
+                Mover2(i, g, FichaPC);
+
+                aux = min(g, j1, PC);
+                if (aux > mejor) {
+                    mejor = aux;
+                    pos = i;
                 }
-                
-                Mover2(i,g,0);
-                
+
+                Mover2(i, g, 0);
+
             }
-            
+
         }
-        Mover2(pos,g,FichaPC);//Marca PC
-      
+        Mover2(pos, g, FichaPC);//Marca PC
+
         return pos;
     }
-    
-    public int min(Juego g, Jugador j1, Jugador PC)
-    {
-        int FichaJ1=(j1.darTurno()*10)+j1.darTurno();
-         //Si gana PC
-        if(ganador(g)==2) return 1;
-        if(!posicionesFree(g)) return 0;
-        int aux, mejor=9999;
-        for(int i=1;i<10;i++)
-        {
-            if(posFree(i,g)){
-                Mover2(i,g,FichaJ1);
-                aux=max(g,j1,PC);
-                System.out.println("Valor aux +++Max: " + aux);
-                if(aux<mejor)
-                {
-                    mejor=aux;
-                }
-               
-                Mover2(i,g,0);
-                
-            }
-        }
-        
-        return mejor;
-    }
-   
-    
-      public int max(Juego g, Jugador j1, Jugador PC)
-    {
-        int FichaPC=(PC.darTurno()*10)+PC.darTurno();
+
+    public int min(Juego g, Jugador j1, Jugador PC) {
+        int FichaJ1 = (j1.darTurno() * 10) + j1.darTurno();
         //Si gana PC
-        if(ganador(g)==1) return -1;
-        if(!posicionesFree(g)) return 0;
-        int aux, mejor=-9999;
-        for(int i=1;i<10;i++)
-        {
-            if(posFree(i,g)){
-                Mover2(i,g,FichaPC);
-                aux=min(g,j1,PC);
-                System.out.println("Valor aux ---Min: " + aux);
-                if(aux>mejor)
-                {
-                    mejor=aux;
+        if (ganador(g) == 2) {
+            return 1;
+        }
+        if (!posicionesFree(g)) {
+            return 0;
+        }
+        int aux, mejor = 9999;
+        for (int i = 1; i < 10; i++) {
+            if (posFree(i, g)) {
+                Mover2(i, g, FichaJ1);
+                aux = max(g, j1, PC);
+                if (aux < mejor) {
+                    mejor = aux;
                 }
-                
-                Mover2(i,g,0);
-                
+
+                Mover2(i, g, 0);
+
             }
         }
-        
+
         return mejor;
     }
-   
+
+    public int max(Juego g, Jugador j1, Jugador PC) {
+        int FichaPC = (PC.darTurno() * 10) + PC.darTurno();
+        //Si gana PC
+        if (ganador(g) == 1) {
+            return -1;
+        }
+        if (!posicionesFree(g)) {
+            return 0;
+        }
+        int aux, mejor = -9999;
+        for (int i = 1; i < 10; i++) {
+            if (posFree(i, g)) {
+                Mover2(i, g, FichaPC);
+                aux = min(g, j1, PC);
+                if (aux > mejor) {
+                    mejor = aux;
+                }
+
+                Mover2(i, g, 0);
+
+            }
+        }
+
+        return mejor;
+    }
 
 }

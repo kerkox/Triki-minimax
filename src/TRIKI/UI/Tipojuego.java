@@ -8,6 +8,7 @@ package TRIKI.UI;
 import TRIKI.Juego;
 import TRIKI.Jugador;
 import java.util.Random;
+import javax.swing.JButton;
 
 /**
  *
@@ -40,6 +41,16 @@ public class Tipojuego extends javax.swing.JFrame {
         random = new Random();
         //mostrarMatriz();
         showTurno(this.jugador_1);
+        ButtonGameListener buttonGameListener = new ButtonGameListener();
+//        this.pos1.addActionListener(buttonGameListener);
+//        this.pos2.addActionListener(buttonGameListener);
+//        this.pos3.addActionListener(buttonGameListener);
+//        this.pos4.addActionListener(buttonGameListener);
+//        this.pos5.addActionListener(buttonGameListener);
+//        this.pos6.addActionListener(buttonGameListener);
+//        this.pos7.addActionListener(buttonGameListener);
+//        this.pos8.addActionListener(buttonGameListener);
+//        this.pos9.addActionListener(buttonGameListener);
 
     }
 
@@ -119,59 +130,62 @@ public class Tipojuego extends javax.swing.JFrame {
 
     }
 
-    public void ModeHuman(int pos, javax.swing.JButton b) {
+    public boolean ValidarFin() {
+        return (this.jugadas > 9 || this.winer != 0);
+    }
+
+    public void ModeHuman(int pos, javax.swing.JButton button) {
 
         aviso.setText(" ");
 
         //*******************************//
-        if (this.jugadas > 9 || this.winer != 0) {
+        if (ValidarFin()) {
             aviso.setText("Fin del Juego");
-        } else {
+            return;
+        }
 
-            if (this.turno == 1) {
+        if (this.turno == 1) {
 
-                this.winer = Game.jugar(jugador_1, pos);
-                if (this.winer == -1) {
-                    aviso.setText("ERROR POSICION OCUPADA");
-                    this.winer = 0;
+            this.winer = Game.jugar(jugador_1, pos);
+            if (this.winer == -1) {
+                aviso.setText("ERROR POSICION OCUPADA");
+                this.winer = 0;
 
-                } else {
-                    b.setText("X");
-                    this.turno += 1;
-                    this.jugadas++;
-                    showTurno(jugador_2); // PARA MOSTRAR EL TURNO AL SIGUIENTE
-                }
-
-            } else if (this.turno == 2) {
-
-                this.winer = Game.jugar(jugador_2, pos);
-
-                if (this.winer == -1) {
-                    aviso.setText("ERROR POSICION OCUPADA");
-                    this.winer = 0;
-                } else {
-                    b.setText("O");
-                    this.turno -= 1;
-                    this.jugadas++;
-                    showTurno(jugador_1); // PARA MOSTRAR EL TURNO AL SIGUIENTE
-                }
-
+            } else {
+                button.setText("X");
+                this.turno += 1;
+                this.jugadas++;
+                showTurno(jugador_2); // PARA MOSTRAR EL TURNO AL SIGUIENTE
             }
 
-            if (this.winer == 1) {
-                nameWin.setText(jugador_1.darNombre());
-                this.jugadas = 9;
+        } else if (this.turno == 2) {
 
-            } else if (this.winer == 2) {
-                nameWin.setText(jugador_2.darNombre());
-                this.jugadas = 9;
+            this.winer = Game.jugar(jugador_2, pos);
+
+            if (this.winer == -1) {
+                aviso.setText("ERROR POSICION OCUPADA");
+                this.winer = 0;
+            } else {
+                button.setText("O");
+                this.turno -= 1;
+                this.jugadas++;
+                showTurno(jugador_1); // PARA MOSTRAR EL TURNO AL SIGUIENTE
             }
 
-            // EVALUCION DE NADIE GANADOR
-            if ((this.jugadas > 9) && (this.winer == 0)) {
-                nameWin.setText("Nadie GANA");
-            }
+        }
 
+        if (this.winer == 1) {
+            nameWin.setText(jugador_1.darNombre());
+            this.jugadas = 9;
+
+        } else if (this.winer == 2) {
+            nameWin.setText(jugador_2.darNombre());
+            this.jugadas = 9;
+        }
+
+        // EVALUACION DE NADIE GANADOR
+        if ((this.jugadas > 9) && (this.winer == 0)) {
+            nameWin.setText("Nadie GANA");
         }
 
     }
@@ -186,62 +200,61 @@ public class Tipojuego extends javax.swing.JFrame {
         aviso.setText(" ");
 
         //*******************************//
-        if (this.jugadas > 9 || this.winer != 0) {
+        if (ValidarFin()) {
             aviso.setText("Fin del Juego");
-        } else {
-            //con esto evaluo quien comienza 
-            // 1 comienza Humano
-            // 2 Comeinza PC
-            // 0 Varia el comienzo
+            return;
+        }
+        //con esto evaluo quien comienza 
+        // 1 comienza Humano
+        // 2 Comeinza PC
+        // 0 Varia el comienzo
 
-            //aqui ya se comienza a decidir quien juega
-            if (this.iniciar == 1) {
+        //aqui ya se comienza a decidir quien juega
+        if (this.iniciar == 1) {
 
-                if (this.turno == 1) {
+            if (this.turno == 1) {
 
-                    this.winer = Game.jugar(jugador_1, pos);
-                    if (this.winer == -1) {
-                        aviso.setText("ERROR POSICION OCUPADA");
-                        this.winer = 0;
+                this.winer = Game.jugar(jugador_1, pos);
+                if (this.winer == -1) {
+                    aviso.setText("ERROR POSICION OCUPADA");
+                    this.winer = 0;
+                    this.TurnoPC = 0;
+                } else {
+                    if (this.winer == 1) {
                         this.TurnoPC = 0;
+                    }
+                    button.setText("X");
+                    this.jugadas++;
+                    showTurno(jugador_2); // PARA MOSTRAR EL TURNO AL SIGUIENTE
+
+                }
+                if (this.TurnoPC == 1) {
+                    if (this.jugadas > 9 || this.winer != 0) {
+                        aviso.setText("Fin del Juego");
                     } else {
-                        if (this.winer == 1) {
-                            this.TurnoPC = 0;
-                        }
-                        button.setText("X");
-                        this.jugadas++;
-                        showTurno(jugador_2); // PARA MOSTRAR EL TURNO AL SIGUIENTE
+                        jugadaPC();
 
                     }
-                    if (this.TurnoPC == 1) {
-                        if (this.jugadas > 9 || this.winer != 0) {
-                            aviso.setText("Fin del Juego");
-                        } else {
-                            jugadaPC();
-
-                        }
-                    }
                 }
+            }
 
-                if (this.winer == 1) {
-                    nameWin.setText(jugador_1.darNombre());
-                    this.jugadas = 9;
-                    this.iniciar = 1;
-                    //Si gana tiene derecho a iniciar en la proxima
-                } else if (this.winer == 2) {
-                    nameWin.setText(jugador_2.darNombre());
-                    this.jugadas = 9;
-                    this.iniciar = 2;
-                    //Si gana tiene derecho a iniciar en la proxima
-                }
+            if (this.winer == 1) {
+                nameWin.setText(jugador_1.darNombre());
+                this.jugadas = 9;
+                this.iniciar = 1;
+                //Si gana tiene derecho a iniciar en la proxima
+            } else if (this.winer == 2) {
+                nameWin.setText(jugador_2.darNombre());
+                this.jugadas = 9;
+                this.iniciar = 2;
+                //Si gana tiene derecho a iniciar en la proxima
+            }
 
-                // EVALUCION DE NADIE GANADOR
-                if ((this.jugadas > 9) && (this.winer == 0)) {
-                    nameWin.setText("Nadie GANA");
-                    this.iniciar = 0;
-                    //se decide al azar;
-                }
-
+            // EVALUCION DE NADIE GANADOR
+            if ((this.jugadas > 9) && (this.winer == 0)) {
+                nameWin.setText("Nadie GANA");
+                this.iniciar = 0;
+                //se decide al azar;
             }
 
         }
@@ -516,7 +529,7 @@ public class Tipojuego extends javax.swing.JFrame {
         setTitle("TRIKI by POOLKER v1.9.0");
 
         jLabel1.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        jLabel1.setText("JUEGO DE TRIKI By BRYANKER v1.9");
+        jLabel1.setText("JUEGO DE TRIKI By PAULKER v1.9");
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         jLabel2.setText("Selecciona el tipo de Juego");
@@ -601,76 +614,88 @@ public class Tipojuego extends javax.swing.JFrame {
         //this.setVisible(false);
 // TODO add your handling code here:
     }//GEN-LAST:event_humanoActionPerformed
+
+    private void buttonPress(java.awt.event.ActionEvent evt) {
+        Matriz();
+        JButton pos = (JButton) evt.getSource();
+        int position = Integer.parseInt(pos.getText());
+        System.out.println("button: pos: " + pos.getText());
+        if (this.tipo == 1) {
+            ModeHuman(position, pos);
+        } else if (this.tipo == 2) {
+            ModePC(position, pos);
+        }
+    }
+
 //###  1
     private void pos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pos1ActionPerformed
-        Matriz();
-        if (this.tipo == 1) {
-            ModeHuman(1, pos1);
-
-        } else if (this.tipo == 2) {
-            ModePC(1, pos1);
-        }
+        buttonPress(evt);
         //Aqui Finaliza el if del tipo de JUego
         // TODO add your handling code here:
     }//GEN-LAST:event_pos1ActionPerformed
 
 //###  4  
     private void pos4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pos4ActionPerformed
-        Matriz();
-        if (this.tipo == 1) {
-            ModeHuman(4, pos4);
-
-        } else if (this.tipo == 2) {
-            ModePC(4, pos4);
-        }
+        buttonPress(evt);
+//        Matriz();
+//        if (this.tipo == 1) {
+//            ModeHuman(4, pos4);
+//
+//        } else if (this.tipo == 2) {
+//            ModePC(4, pos4);
+//        }
         //Aqui Finaliza el if del tipo de JUego
         // TODO add your handling code here:
     }//GEN-LAST:event_pos4ActionPerformed
 //###  5 
     private void pos5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pos5ActionPerformed
-        Matriz();
-        if (this.tipo == 1) {
-            ModeHuman(5, pos5);
-
-        } else if (this.tipo == 2) {
-            ModePC(5, pos5);
-        }
+        buttonPress(evt);
+//        Matriz();
+//        if (this.tipo == 1) {
+//            ModeHuman(5, pos5);
+//
+//        } else if (this.tipo == 2) {
+//            ModePC(5, pos5);
+//        }
         //Aqui Finaliza el if del tipo de JUego
         // TODO add your handling code here:
     }//GEN-LAST:event_pos5ActionPerformed
 //###  2 
     private void pos2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pos2ActionPerformed
-        Matriz();
-        if (this.tipo == 1) {
-            ModeHuman(2, pos2);
-
-        } else if (this.tipo == 2) {
-            ModePC(2, pos2);
-        }
+        buttonPress(evt);
+//        Matriz();
+//        if (this.tipo == 1) {
+//            ModeHuman(2, pos2);
+//
+//        } else if (this.tipo == 2) {
+//            ModePC(2, pos2);
+//        }
         //Aqui Finaliza el if del tipo de JUego
         // TODO add your handling code here:
     }//GEN-LAST:event_pos2ActionPerformed
 //###  3
     private void pos3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pos3ActionPerformed
-        Matriz();
-        if (this.tipo == 1) {
-            ModeHuman(3, pos3);
-
-        } else if (this.tipo == 2) {
-            ModePC(3, pos3);
-        }
+        buttonPress(evt);
+//        Matriz();
+//        if (this.tipo == 1) {
+//            ModeHuman(3, pos3);
+//
+//        } else if (this.tipo == 2) {
+//            ModePC(3, pos3);
+//        }
         //Aqui Finaliza el if del tipo de JUego
         // TODO add your handling code here:
     }//GEN-LAST:event_pos3ActionPerformed
 //###  6
     private void pos6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pos6ActionPerformed
-        Matriz();
-        if (this.tipo == 1) {
-            ModeHuman(6, pos6);
-
-        } else if (this.tipo == 2) {
-            ModePC(6, pos6);
-        }
+        buttonPress(evt);
+//        Matriz();
+//        if (this.tipo == 1) {
+//            ModeHuman(6, pos6);
+//
+//        } else if (this.tipo == 2) {
+//            ModePC(6, pos6);
+//        }
         //Aqui Finaliza el if del tipo de JUego
         // TODO add your handling code here:
     }//GEN-LAST:event_pos6ActionPerformed
@@ -688,25 +713,27 @@ public class Tipojuego extends javax.swing.JFrame {
     }//GEN-LAST:event_pos9ActionPerformed
 //###  8
     private void pos8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pos8ActionPerformed
-        Matriz();
-        if (this.tipo == 1) {
-            ModeHuman(8, pos8);
-
-        } else if (this.tipo == 2) {
-            ModePC(8, pos8);
-        }
+        buttonPress(evt);
+//        Matriz();
+//        if (this.tipo == 1) {
+//            ModeHuman(8, pos8);
+//
+//        } else if (this.tipo == 2) {
+//            ModePC(8, pos8);
+//        }
         //Aqui Finaliza el if del tipo de JUego
         // TODO add your handling code here:
     }//GEN-LAST:event_pos8ActionPerformed
 //###  7
     private void pos7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pos7ActionPerformed
-        Matriz();
-        if (this.tipo == 1) {
-            ModeHuman(7, pos7);
-
-        } else if (this.tipo == 2) {
-            ModePC(7, pos7);
-        }
+        buttonPress(evt);
+//        Matriz();
+//        if (this.tipo == 1) {
+//            ModeHuman(7, pos7);
+//
+//        } else if (this.tipo == 2) {
+//            ModePC(7, pos7);
+//        }
         //Aqui Finaliza el if del tipo de JUego
         // TODO add your handling code here:
     }//GEN-LAST:event_pos7ActionPerformed
