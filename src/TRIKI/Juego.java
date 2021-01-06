@@ -22,9 +22,7 @@ public class Juego {
         for (int x = 0; x < ancho; x++) {
             for (int y = 0; y < largo; y++) {
                 this.tablero[x][y] = 0;
-                
             }
-
         }
         //0,0,0,0,0,0,0,0,0;
         //cosntructor
@@ -66,9 +64,6 @@ public class Juego {
         int pos=0;
             pos= m1.moverPC(this, j1, pc);
             return pos;
-
-        
-
         
     }
 

@@ -18,9 +18,9 @@ public class Tipojuego extends javax.swing.JFrame {
     /**
      * Creates new form Tipojuego
      */
-    private Juego G1;
-    public Jugador j1;
-    public Jugador j2;
+    private Juego Game;
+    public Jugador jugador_1;
+    public Jugador jugador_2;
     public int tipo = 0;
     private int turno = 1;
     private int winer = 0;
@@ -28,26 +28,25 @@ public class Tipojuego extends javax.swing.JFrame {
     private int TurnoPC = 1;
     private int iniciar = 1;
     private int HistoryStart = 1;
-    private Random md;
+    private Random random;
     private int posP;
 
     public Tipojuego() {
-
 //        this.game.setVisible(true);
         initComponents();
-        G1 = new Juego(3, 3);
-        j1 = new Jugador(1, "Jugador 1");
-        j2 = new Jugador(2, "Jugador 2");
-        md = new Random();
+        Game = new Juego(3, 3);
+        jugador_1 = new Jugador(1, "Jugador 1");
+        jugador_2 = new Jugador(2, "Jugador 2");
+        random = new Random();
         //mostrarMatriz();
-        showTurno(this.j1);
-        
+        showTurno(this.jugador_1);
 
     }
 
-    public void IniciaPC(){
-         
+    public void IniciaPC() {
+
     }
+
     private void showTurno(Jugador player) {
 
         if (player.darTurno() == 1) {
@@ -67,14 +66,14 @@ public class Tipojuego extends javax.swing.JFrame {
     }
 
     public void Matriz() {
-        System.out.println("| " + G1.tablero[0][0] + " | " + G1.tablero[0][1] + " | " + G1.tablero[0][2] + " |");
-        System.out.println("| " + G1.tablero[1][0] + " | " + G1.tablero[1][1] + " | " + G1.tablero[1][2] + " |");
-        System.out.println("| " + G1.tablero[2][0] + " | " + G1.tablero[2][1] + " | " + G1.tablero[2][2] + " |");
+        System.out.println("| " + Game.tablero[0][0] + " | " + Game.tablero[0][1] + " | " + Game.tablero[0][2] + " |");
+        System.out.println("| " + Game.tablero[1][0] + " | " + Game.tablero[1][1] + " | " + Game.tablero[1][2] + " |");
+        System.out.println("| " + Game.tablero[2][0] + " | " + Game.tablero[2][1] + " | " + Game.tablero[2][2] + " |");
     }
 
     public void jugadaPC() {
-        int posPC = G1.jugadaPC(j2, j1, this.jugadas);
-        this.winer = G1.m1.ganador(G1);
+        int posPC = Game.jugadaPC(jugador_2, jugador_1, this.jugadas);
+        this.winer = Game.m1.ganador(Game);
         if (this.winer == -1) {
             aviso.setText("ERROR PC no sabe que hacer valor pos: " + posPC);
         } else {
@@ -131,7 +130,7 @@ public class Tipojuego extends javax.swing.JFrame {
 
             if (this.turno == 1) {
 
-                this.winer = G1.jugar(j1, pos);
+                this.winer = Game.jugar(jugador_1, pos);
                 if (this.winer == -1) {
                     aviso.setText("ERROR POSICION OCUPADA");
                     this.winer = 0;
@@ -140,12 +139,12 @@ public class Tipojuego extends javax.swing.JFrame {
                     b.setText("X");
                     this.turno += 1;
                     this.jugadas++;
-                    showTurno(j2); // PARA MOSTRAR EL TURNO AL SIGUIENTE
+                    showTurno(jugador_2); // PARA MOSTRAR EL TURNO AL SIGUIENTE
                 }
 
             } else if (this.turno == 2) {
 
-                this.winer = G1.jugar(j2, pos);
+                this.winer = Game.jugar(jugador_2, pos);
 
                 if (this.winer == -1) {
                     aviso.setText("ERROR POSICION OCUPADA");
@@ -154,17 +153,17 @@ public class Tipojuego extends javax.swing.JFrame {
                     b.setText("O");
                     this.turno -= 1;
                     this.jugadas++;
-                    showTurno(j1); // PARA MOSTRAR EL TURNO AL SIGUIENTE
+                    showTurno(jugador_1); // PARA MOSTRAR EL TURNO AL SIGUIENTE
                 }
 
             }
 
             if (this.winer == 1) {
-                nameWin.setText(j1.darNombre());
+                nameWin.setText(jugador_1.darNombre());
                 this.jugadas = 9;
 
             } else if (this.winer == 2) {
-                nameWin.setText(j2.darNombre());
+                nameWin.setText(jugador_2.darNombre());
                 this.jugadas = 9;
             }
 
@@ -178,7 +177,7 @@ public class Tipojuego extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("empty-statement")
-    public void ModePC(int pos, javax.swing.JButton b) {
+    public void ModePC(int pos, javax.swing.JButton button) {
 
         this.TurnoPC = 1;
         //############################
@@ -194,14 +193,13 @@ public class Tipojuego extends javax.swing.JFrame {
             // 1 comienza Humano
             // 2 Comeinza PC
             // 0 Varia el comienzo
-           
-            //aqui ya se comienza a decidir quien juega
 
+            //aqui ya se comienza a decidir quien juega
             if (this.iniciar == 1) {
 
                 if (this.turno == 1) {
 
-                    this.winer = G1.jugar(j1, pos);
+                    this.winer = Game.jugar(jugador_1, pos);
                     if (this.winer == -1) {
                         aviso.setText("ERROR POSICION OCUPADA");
                         this.winer = 0;
@@ -210,9 +208,9 @@ public class Tipojuego extends javax.swing.JFrame {
                         if (this.winer == 1) {
                             this.TurnoPC = 0;
                         }
-                        b.setText("X");
+                        button.setText("X");
                         this.jugadas++;
-                        showTurno(j2); // PARA MOSTRAR EL TURNO AL SIGUIENTE
+                        showTurno(jugador_2); // PARA MOSTRAR EL TURNO AL SIGUIENTE
 
                     }
                     if (this.TurnoPC == 1) {
@@ -226,12 +224,12 @@ public class Tipojuego extends javax.swing.JFrame {
                 }
 
                 if (this.winer == 1) {
-                    nameWin.setText(j1.darNombre());
+                    nameWin.setText(jugador_1.darNombre());
                     this.jugadas = 9;
                     this.iniciar = 1;
                     //Si gana tiene derecho a iniciar en la proxima
                 } else if (this.winer == 2) {
-                    nameWin.setText(j2.darNombre());
+                    nameWin.setText(jugador_2.darNombre());
                     this.jugadas = 9;
                     this.iniciar = 2;
                     //Si gana tiene derecho a iniciar en la proxima
@@ -244,8 +242,7 @@ public class Tipojuego extends javax.swing.JFrame {
                     //se decide al azar;
                 }
 
-            } 
-            
+            }
 
         }
 
@@ -515,6 +512,7 @@ public class Tipojuego extends javax.swing.JFrame {
                 .addGap(25, 25, 25))
         );
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TRIKI by POOLKER v1.9.0");
 
         jLabel1.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
@@ -580,11 +578,11 @@ public class Tipojuego extends javax.swing.JFrame {
 
     private void pcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pcActionPerformed
         this.setVisible(false);
+        Grafico.setBounds(this.getBounds());
         Grafico.setVisible(true);
         this.tipo = 2;
-        this.j1 = new Jugador(1, "Jugador 1");
-        this.j2 = new Jugador(2, "PC");
-     
+        this.jugador_1 = new Jugador(1, "Jugador 1");
+        this.jugador_2 = new Jugador(2, "PC");
 
 // TODO add your handling code here:
     }//GEN-LAST:event_pcActionPerformed
@@ -593,8 +591,8 @@ public class Tipojuego extends javax.swing.JFrame {
         this.setVisible(false);
         Grafico.setVisible(true);
         this.tipo = 1;
-        this.j1 = new Jugador(1, "Jugador 1");
-        this.j2 = new Jugador(2, "Jugador 2");
+        this.jugador_1 = new Jugador(1, "Jugador 1");
+        this.jugador_2 = new Jugador(2, "Jugador 2");
 //        this.game=new Grafico();
 //        this.game.setVisible(true);
 //        this.game.tipo=1;
@@ -715,7 +713,7 @@ public class Tipojuego extends javax.swing.JFrame {
 
 
     private void restartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartActionPerformed
-        G1 = new Juego(3, 3);
+        Game = new Juego(3, 3);
         this.jugadas = 1;
         this.turno = 1;
         this.winer = 0;
@@ -731,69 +729,69 @@ public class Tipojuego extends javax.swing.JFrame {
         pos7.setText("7");
         pos8.setText("8");
         pos9.setText("9");
-        
-         if (this.iniciar == 0) {
-                // aqui pongo variable quien comienza osea si el anterior fue PC luego Humano
-                if (this.HistoryStart == 1) {
-                    this.HistoryStart += 1;
-                    this.iniciar = 2;
-                } else if (this.HistoryStart == 2) {
-                    this.HistoryStart -= 1;
-                    this.iniciar = 1;
-                }
 
+        if (this.iniciar == 0) {
+            // aqui pongo variable quien comienza osea si el anterior fue PC luego Humano
+            if (this.HistoryStart == 1) {
+                this.HistoryStart += 1;
+                this.iniciar = 2;
+            } else if (this.HistoryStart == 2) {
+                this.HistoryStart -= 1;
+                this.iniciar = 1;
             }
-         if (this.iniciar == 2) {
+
+        }
+        if (this.iniciar == 2) {
 //···········#########RAMDOM DE PC======================================================================
-                                
-                                posP = (int) (md.nextDouble() * 9 + 1);
-                                
-                                int fichaPC = (j2.darTurno() * 10) + j2.darTurno();
-                                
-                                G1.IncioPC(this.posP, fichaPC);
-                                
-                                switch (posP) {
-                                    case 1:
-                                        pos1.setText("PC");
-                                        this.jugadas++;
-                                        break;
-                                    case 2:
-                                        pos2.setText("PC");
-                                        this.jugadas++;
-                                        break;
-                                    case 3:
-                                        pos3.setText("PC");
-                                        this.jugadas++;
-                                        break;
-                                    case 4:
-                                        pos4.setText("PC");
-                                        this.jugadas++;
-                                        break;
-                                    case 5:
-                                        pos5.setText("PC");
-                                        this.jugadas++;
-                                        break;
-                                    case 6:
-                                        pos6.setText("PC");
-                                        this.jugadas++;
-                                        break;
-                                    case 7:
-                                        pos7.setText("PC");
-                                        this.jugadas++;
-                                        break;
-                                    case 8:
-                                        pos8.setText("PC");
-                                        this.jugadas++;
-                                        break;
-                                    case 9:
-                                        pos9.setText("PC");
-                                        this.jugadas++;
-                                        break;
-                                }
 
+            posP = (int) (random.nextDouble() * 9 + 1);
+
+            int fichaPC = (jugador_2.darTurno() * 10) + jugador_2.darTurno();
+
+            Game.IncioPC(this.posP, fichaPC);
+
+            switch (posP) {
+                case 1:
+                    pos1.setText("PC");
+                    this.jugadas++;
+                    break;
+                case 2:
+                    pos2.setText("PC");
+                    this.jugadas++;
+                    break;
+                case 3:
+                    pos3.setText("PC");
+                    this.jugadas++;
+                    break;
+                case 4:
+                    pos4.setText("PC");
+                    this.jugadas++;
+                    break;
+                case 5:
+                    pos5.setText("PC");
+                    this.jugadas++;
+                    break;
+                case 6:
+                    pos6.setText("PC");
+                    this.jugadas++;
+                    break;
+                case 7:
+                    pos7.setText("PC");
+                    this.jugadas++;
+                    break;
+                case 8:
+                    pos8.setText("PC");
+                    this.jugadas++;
+                    break;
+                case 9:
+                    pos9.setText("PC");
+                    this.jugadas++;
+                    break;
             }
-         this.iniciar=1;
-        showTurno(j1); // PARA MOSTRAR EL TURNO AL SIGUIENTE
+
+        }
+        this.iniciar = 1;
+        showTurno(jugador_1); // PARA MOSTRAR EL TURNO AL SIGUIENTE
 
         // TODO add your handling code here:
     }//GEN-LAST:event_restartActionPerformed
@@ -812,7 +810,7 @@ public class Tipojuego extends javax.swing.JFrame {
         this.restartActionPerformed(null);
     }//GEN-LAST:event_GraficoWindowClosing
 
-  
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFrame Grafico;
     private javax.swing.JLabel Numjugada;

@@ -352,6 +352,7 @@
     </Container>
   </NonVisualComponents>
   <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" value="TRIKI by POOLKER v1.9.0"/>
   </Properties>
   <SyntheticProperties>

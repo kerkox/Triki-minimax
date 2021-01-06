@@ -335,7 +335,6 @@ public class Movimiento {
     
     public int min(Juego g, Jugador j1, Jugador PC)
     {
-        int FichaPC=(PC.darTurno()*10)+PC.darTurno();
         int FichaJ1=(j1.darTurno()*10)+j1.darTurno();
          //Si gana PC
         if(ganador(g)==2) return 1;
@@ -346,6 +345,7 @@ public class Movimiento {
             if(posFree(i,g)){
                 Mover2(i,g,FichaJ1);
                 aux=max(g,j1,PC);
+                System.out.println("Valor aux +++Max: " + aux);
                 if(aux<mejor)
                 {
                     mejor=aux;
@@ -363,8 +363,7 @@ public class Movimiento {
       public int max(Juego g, Jugador j1, Jugador PC)
     {
         int FichaPC=(PC.darTurno()*10)+PC.darTurno();
-        int FichaJ1=(j1.darTurno()*10)+j1.darTurno();
-         //Si gana PC
+        //Si gana PC
         if(ganador(g)==1) return -1;
         if(!posicionesFree(g)) return 0;
         int aux, mejor=-9999;
@@ -373,6 +372,7 @@ public class Movimiento {
             if(posFree(i,g)){
                 Mover2(i,g,FichaPC);
                 aux=min(g,j1,PC);
+                System.out.println("Valor aux ---Min: " + aux);
                 if(aux>mejor)
                 {
                     mejor=aux;
